@@ -8,7 +8,7 @@ restartDiv.style.left = '0';
 restartDiv.style.width = '100vw';
 restartDiv.style.height = '100vh';
 restartDiv.style.background = 'rgba(0,0,0,0.5)';
-restartDiv.style.display = 'none';
+restartDiv.style.display = 'none'; // 항상 none으로 시작
 restartDiv.style.justifyContent = 'center';
 restartDiv.style.alignItems = 'center';
 restartDiv.style.flexDirection = 'column';
@@ -18,8 +18,6 @@ restartDiv.style.color = '#fff';
 restartDiv.style.textAlign = 'center';
 restartDiv.style.fontFamily = 'sans-serif';
 restartDiv.style.gap = '20px';
-restartDiv.style.display = 'none';
-restartDiv.style.display = 'flex';
 restartDiv.innerHTML = `<div id="scoreText"></div><button id="restartBtn" style="font-size:1em;padding:10px 30px;">다시 시작</button>`;
 document.body.appendChild(restartDiv);
 
