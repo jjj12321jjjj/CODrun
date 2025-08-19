@@ -49,7 +49,7 @@ let normalImageSrc, jumpImageSrc;
 // character
 let character = {
     x: 10,
-    y: canvas.height - 10, // 화면 아래쪽으로
+    y: canvas.height + 20, // 화면 아래쪽으로
     width: 150,
     height: 150,
     draw() {
@@ -61,7 +61,7 @@ let character = {
 class Cactus {
     constructor() {
         this.x = canvas.width;
-        this.y = canvas.height - 5; // character.y 맞춤
+        this.y = canvas.height + 15; // character.y 맞춤
         this.width = 40;
         this.height = 45;
     }
