@@ -109,15 +109,7 @@ function init() {
     let drawY = (canvas.height - drawHeight) / 2;
     ctx.drawImage(bgImg, drawX, drawY, drawWidth, drawHeight);
 
-    // 점수 표시 (배경 기준 좌측 상단)
-    ctx.save();
-    ctx.font = 'bold 32px sans-serif';
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'left';
-    ctx.fillText(`점수: ${score}`, drawX + 20, drawY + 40);
-    ctx.restore();
-
-    // 점수 표시 (배경 기준 왼쪽 상단)
+    // 점수 표시 (배경 기준 좌측 상단, 한 번만)
     ctx.save();
     ctx.font = 'bold 32px sans-serif';
     ctx.fillStyle = '#fff';
@@ -146,6 +138,7 @@ function init() {
     character.y = Math.floor(groundY);
     cactuses.forEach(cactus => {
         cactus.y = Math.floor(groundY);
+        cactus.x = drawX + drawWidth * 0.8;
     });
 
     if (timer % 500 === 0) gameSpeed += 0.1;
@@ -314,16 +307,17 @@ function showCharacterSelectBackground() {
         let drawX = (canvas.width - drawWidth) / 2;
         let drawY = (canvas.height - drawHeight) / 2;
         ctx.drawImage(morningImg, drawX, drawY, drawWidth, drawHeight);
-        // 캐릭터 선택창 위치 조정 (background 영역 중앙)
-        selectDiv.style.position = 'absolute';
-        selectDiv.style.left = `${drawX + drawWidth/2 - selectDiv.offsetWidth/2}px`;
-        selectDiv.style.top = `${drawY + drawHeight/2 - selectDiv.offsetHeight/2}px`;
-        selectDiv.style.width = '';
-        selectDiv.style.height = '';
-        selectDiv.style.background = 'rgba(255,255,255,0.0)';
-        selectDiv.style.zIndex = '10';
-        selectDiv.style.justifyItems = 'center';
-        selectDiv.style.alignItems = 'center';
+    // 캐릭터 선택창 위치 조정 (background 영역 중앙, width/height 명시)
+    selectDiv.style.position = 'absolute';
+    selectDiv.style.width = '600px';
+    selectDiv.style.height = '400px';
+    selectDiv.style.left = `${drawX + drawWidth/2 - 300}px`;
+    selectDiv.style.top = `${drawY + drawHeight/2 - 200}px`;
+    selectDiv.style.background = 'rgba(255,255,255,0.0)';
+    selectDiv.style.zIndex = '10';
+    selectDiv.style.display = 'grid';
+    selectDiv.style.justifyItems = 'center';
+    selectDiv.style.alignItems = 'center';
     }
     if (morningImg.complete) morningImg.onload();
 }
@@ -368,7 +362,7 @@ function startGame() {
 // --- 재시작 버튼 이벤트 ---
 document.getElementById('restartBtn').onclick = function() {
     restartDiv.style.display = 'none';
-    selectDiv.style.display = 'flex';
+    selectDiv.style.display = 'grid';
     showCharacterSelectBackground();
     // 캔버스 완전 초기화: 배경만 그림
     ctx.clearRect(0, 0, canvas.width, canvas.height);
