@@ -49,7 +49,7 @@ let normalImageSrc, jumpImageSrc;
 // character
 let character = {
     x: 10,
-    y: Math.floor(canvas.height * 2 / 3), // 배경 기준 위에서 2/3 지점
+    y: 0, // 실제 y값은 게임 루프에서 동적으로 결정
     width: 150,
     height: 150,
     draw() {
@@ -61,7 +61,7 @@ let character = {
 class Cactus {
     constructor() {
         this.x = canvas.width;
-        this.y = Math.floor(canvas.height * 2 / 3) + 5; // 캐릭터와 거의 같은 높이
+        this.y = 0; // 실제 y값은 게임 루프에서 동적으로 결정
         this.width = 40;
         this.height = 45;
     }
@@ -110,6 +110,13 @@ function init() {
     let drawX = (canvas.width - drawWidth) / 2;
     let drawY = (canvas.height - drawHeight) / 2;
     ctx.drawImage(bgImg, drawX, drawY, drawWidth, drawHeight);
+
+    // 캐릭터와 cactus의 y값을 배경 위에서 2/3 지점에 위치
+    let groundY = drawY + drawHeight * 2 / 3;
+    character.y = groundY;
+    cactuses.forEach(cactus => {
+        cactus.y = groundY + 5;
+    });
 
     if (timer % 500 === 0) gameSpeed += 0.2;
 
