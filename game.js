@@ -94,13 +94,6 @@ function init() {
     score = Math.floor(timer / 60); // 60프레임=1초 기준 점수
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // 점수 표시
-    ctx.save();
-    ctx.font = 'bold 32px sans-serif';
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'right';
-    ctx.fillText(`점수: ${score}`, canvas.width - 30, 50);
-    ctx.restore();
     // 배경 이미지를 원본 비율로 캔버스 중앙에 그리기
     let bgRatio = bgImg.width / bgImg.height;
     let canvasRatio = canvas.width / canvas.height;
@@ -116,6 +109,29 @@ function init() {
     let drawY = (canvas.height - drawHeight) / 2;
     ctx.drawImage(bgImg, drawX, drawY, drawWidth, drawHeight);
 
+    // 점수 표시 (배경 기준 왼쪽 상단)
+    ctx.save();
+    ctx.font = 'bold 32px sans-serif';
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'left';
+    ctx.fillText(`점수: ${score}`, drawX + 20, drawY + 40);
+    ctx.restore();
+
+    // 두 번째 배경 그리기(기존 코드 유지, 변수명에 _score 추가)
+    let bgRatio_score = bgImg.width / bgImg.height;
+    let canvasRatio_score = canvas.width / canvas.height;
+    let drawWidth_score, drawHeight_score;
+    if (canvasRatio_score > bgRatio_score) {
+        drawHeight_score = canvas.height;
+        drawWidth_score = bgImg.width * (canvas.height / bgImg.height);
+    } else {
+        drawWidth_score = canvas.width;
+        drawHeight_score = bgImg.height * (canvas.width / bgImg.width);
+    }
+    let drawX_score = (canvas.width - drawWidth_score) / 2;
+    let drawY_score = (canvas.height - drawHeight_score) / 2;
+    ctx.drawImage(bgImg, drawX_score, drawY_score, drawWidth_score, drawHeight_score);
+
     // 캐릭터와 cactus의 착지 위치를 배경 위에서 2/3 지점에 설정
     let groundY = drawY + drawHeight * 2 / 3;
     character.groundY = groundY;
@@ -124,7 +140,7 @@ function init() {
         cactus.y = Math.floor(groundY);
     });
 
-    if (timer % 500 === 0) gameSpeed += 0.2;
+    if (timer % 500 === 0) gameSpeed += 0.1;
 
     // cactus 등장 간격: 1, 2, 3, 4초 중 랜덤
     if (timer >= nextCactusTime) {
@@ -190,7 +206,7 @@ function init() {
     if (character.y === 0) character.y = character.groundY; // 최초 위치 지정
     if (isJump) {
         selectedCharImg.src = jumpImageSrc;
-        character.y -= 5; // 점프 속도 조정
+        character.y -= 10; // 점프 높이 증가
         jumpTimer++;
     } else {
         selectedCharImg.src = normalImageSrc;
@@ -262,9 +278,40 @@ selectDiv.addEventListener("click", (e) => {
         };
         selectedCharImg.src = normalImageSrc;
         selectDiv.style.display = "none";
+        // 캐릭터 선택 후 선택창 위치 초기화
+        selectDiv.style.left = '';
+        selectDiv.style.top = '';
+        selectDiv.style.width = '';
+        selectDiv.style.background = '';
         startGame();
     }
 });
+
+// 캐릭터 선택창을 배경 영역 안에 위치시키는 함수
+function showCharacterSelectBackground() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let bgRatio = bgImg.width / bgImg.height;
+    let canvasRatio = canvas.width / canvas.height;
+    let drawWidth, drawHeight;
+    if (canvasRatio > bgRatio) {
+        drawHeight = canvas.height;
+        drawWidth = bgImg.width * (canvas.height / bgImg.height);
+    } else {
+        drawWidth = canvas.width;
+        drawHeight = bgImg.height * (canvas.width / bgImg.width);
+    }
+    let drawX = (canvas.width - drawWidth) / 2;
+    let drawY = (canvas.height - drawHeight) / 2;
+    ctx.drawImage(bgImg, drawX, drawY, drawWidth, drawHeight);
+    // 캐릭터 선택창 위치 조정 (background 영역 안)
+    selectDiv.style.position = 'absolute';
+    selectDiv.style.left = `${drawX + 40}px`;
+    selectDiv.style.top = `${drawY + drawHeight * 0.55}px`;
+    selectDiv.style.width = `${drawWidth - 80}px`;
+    selectDiv.style.height = 'auto';
+    selectDiv.style.background = 'rgba(255,255,255,0.0)';
+    selectDiv.style.zIndex = '10';
+}
 
 // --- 이미지 로딩 후 게임 시작 ---
 function startGame() {
@@ -278,6 +325,23 @@ function startGame() {
     gameSpeed = 2;
     nextCactusTime = 0;
     bgPhase = 'morning';
+    // 캔버스 완전 초기화: 배경만 그림
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // drawX, drawY 등은 init에서만 선언
+    // 배경만 그림
+    let bgRatio = bgImg.width / bgImg.height;
+    let canvasRatio = canvas.width / canvas.height;
+    let drawWidth, drawHeight;
+    if (canvasRatio > bgRatio) {
+        drawHeight = canvas.height;
+        drawWidth = bgImg.width * (canvas.height / bgImg.height);
+    } else {
+        drawWidth = canvas.width;
+        drawHeight = bgImg.height * (canvas.width / bgImg.width);
+    }
+    let drawX = (canvas.width - drawWidth) / 2;
+    let drawY = (canvas.height - drawHeight) / 2;
+    ctx.drawImage(bgImg, drawX, drawY, drawWidth, drawHeight);
     imagesToLoad.forEach(img => {
         if(img.complete) loadedCount++;
         else img.onload = () => {
@@ -290,6 +354,23 @@ function startGame() {
 document.getElementById('restartBtn').onclick = function() {
     restartDiv.style.display = 'none';
     selectDiv.style.display = 'flex';
+    showCharacterSelectBackground();
+    // 캔버스 완전 초기화: 배경만 그림
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // drawX, drawY 등은 init에서만 선언
+    let bgRatio = bgImg.width / bgImg.height;
+    let canvasRatio = canvas.width / canvas.height;
+    let drawWidth, drawHeight;
+    if (canvasRatio > bgRatio) {
+        drawHeight = canvas.height;
+        drawWidth = bgImg.width * (canvas.height / bgImg.height);
+    } else {
+        drawWidth = canvas.width;
+        drawHeight = bgImg.height * (canvas.width / bgImg.width);
+    }
+    let drawX = (canvas.width - drawWidth) / 2;
+    let drawY = (canvas.height - drawHeight) / 2;
+    ctx.drawImage(bgImg, drawX, drawY, drawWidth, drawHeight);
     // 캐릭터 선택 후 startGame()에서 초기화됨
 };
 }
