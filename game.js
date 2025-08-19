@@ -50,11 +50,15 @@ let normalImageSrc, jumpImageSrc;
 let character = {
     x: 10,
     y: 0, // 실제 y값은 게임 루프에서 동적으로 결정
-    width: 150,
-    height: 150,
+    width: 120, // 기준 너비
+    height: 120, // 기준 높이(이미지 비율에 따라 동적으로 변경)
     groundY: 0, // 착지 위치(배경 기준)
     draw() {
-        ctx.drawImage(selectedCharImg, this.x, this.y, this.width, this.height);
+    // 이미지 비율에 맞게 크기 조정
+    let ratio = selectedCharImg.naturalWidth && selectedCharImg.naturalHeight ? selectedCharImg.naturalWidth / selectedCharImg.naturalHeight : 1;
+    let drawWidth = this.width;
+    let drawHeight = this.width / ratio;
+    ctx.drawImage(selectedCharImg, this.x, this.y, drawWidth, drawHeight);
     }
 };
 
@@ -63,8 +67,8 @@ class Cactus {
     constructor() {
         this.x = canvas.width;
         this.y = 0; // 실제 y값은 게임 루프에서 동적으로 결정
-        this.width = 40;
-        this.height = 45;
+        this.width = 20;
+        this.height = 22;
     }
     draw() {
         ctx.drawImage(cactusImg, this.x, this.y, this.width, this.height);
@@ -115,8 +119,9 @@ function init() {
     // 캐릭터와 cactus의 착지 위치를 배경 위에서 2/3 지점에 설정
     let groundY = drawY + drawHeight * 2 / 3;
     character.groundY = groundY;
+    character.y = Math.floor(groundY);
     cactuses.forEach(cactus => {
-        cactus.y = groundY + 5;
+        cactus.y = Math.floor(groundY);
     });
 
     if (timer % 500 === 0) gameSpeed += 0.2;
