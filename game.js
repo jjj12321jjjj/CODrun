@@ -74,9 +74,12 @@ let timer = 0;
 let cactuses = [];
 let isJump = false;
 let jumpTimer = 0;
+let jumpCount = 0;
 let animation;
 let gameSpeed = 2;
 let nextCactusTime = 0;
+let lastCactusInterval = 0;
+let lastWasZero = false;
 let bgPhase = 'morning';
 
 // --- 게임 루프 ---
@@ -110,11 +113,35 @@ function init() {
 
     if (timer % 500 === 0) gameSpeed += 0.2;
 
-    // 장애물 생성 간격 랜덤화
+    // cactus 등장 간격: 0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8초 중 랜덤
     if (timer >= nextCactusTime) {
         cactuses.push(new Cactus());
-        // 60~180 프레임(약 1~3초) 사이 랜덤
-        nextCactusTime = timer + Math.floor(Math.random() * 120) + 60;
+        let intervals = [0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8];
+        let interval;
+        while (true) {
+            interval = intervals[Math.floor(Math.random() * intervals.length)];
+            // 0.3초 이후(0.6, 0.9, ...) 또는 0이 두 번 연속일 때 최소 0.9초 간격
+            if (interval > 0.3) {
+                if (lastCactusInterval < 0.9) {
+                    interval = 0.9;
+                }
+                break;
+            } else if (interval === 0) {
+                if (lastWasZero) {
+                    interval = 0.9;
+                    lastWasZero = false;
+                    break;
+                } else {
+                    lastWasZero = true;
+                    break;
+                }
+            } else {
+                lastWasZero = false;
+                break;
+            }
+        }
+        lastCactusInterval = interval;
+        nextCactusTime = timer + Math.round(interval * 60); // 60프레임=1초
     }
 
     // 시간에 따라 배경 변경
@@ -146,7 +173,7 @@ function init() {
         }
     });
 
-    // 점프 처리 + 이미지 변경
+    // 점프 처리 + 이미지 변경 (이중 점프)
     if (isJump) {
         selectedCharImg.src = jumpImageSrc;
         character.y -= 5; // 점프 속도 조정
@@ -159,6 +186,7 @@ function init() {
     if (jumpTimer > 50) {
         isJump = false;
         jumpTimer = 0;
+        jumpCount = 0;
     }
 
     character.draw();
@@ -168,7 +196,7 @@ function init() {
 function collisionDetect(character, cactus) {
     let xDiff = cactus.x - (character.x + character.width);
     let yDiff = cactus.y - (character.y + character.height);
-    if (xDiff < -5 && yDiff < -5) {
+    if (xDiff < -5 && yDiff < -15) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         cancelAnimationFrame(animation);
         // 게임 오버 UI 표시
@@ -179,13 +207,22 @@ function collisionDetect(character, cactus) {
 
 // PC 키보드 점프
 document.addEventListener('keydown', function(e) {
-    if (e.code === 'Space' && !isJump && character.y === canvas.height - 100) isJump = true;
+    if (e.code === 'Space') {
+        // 이중 점프: jumpCount < 2
+        if (jumpCount < 2) {
+            isJump = true;
+            jumpCount++;
+        }
+    }
 });
 
 // 모바일 터치 점프
 canvas.addEventListener('touchstart', function(e) {
     e.preventDefault();
-    if (!isJump && character.y === canvas.height - 100) isJump = true;
+    if (jumpCount < 2) {
+        isJump = true;
+        jumpCount++;
+    }
 });
 
 // --- 캐릭터 선택 ---
