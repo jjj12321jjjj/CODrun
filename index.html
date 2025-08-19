@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>COD Runner</title>
+<style>
+    body { margin: 0; overflow: hidden; }
+    #characterSelect { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; z-index: 10; }
+    #characterSelect img { width: 80px; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
+    #characterSelect img:hover { border-color: gold; }
+    canvas { display: block; margin: 0 auto; background: #eee; }
+</style>
+</head>
+<body>
+
+<div id="characterSelect">
+    <img src="./img/character/konig.png" alt="Konig">
+    <img src="./img/character/horangi.png" alt="Horangi">
+    <img src="./img/character/krueger1.png" alt="Krueger1">
+    <img src="./img/character/krueger2.png" alt="Krueger2">
+    <img src="./img/character/nikto.png" alt="Nikto">
+</div>
+
+<canvas id="canvas"></canvas>
+
+<script src="game.js"></script>
+</body>
+</html>
