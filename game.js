@@ -67,8 +67,8 @@ class Cactus {
     constructor() {
         this.x = canvas.width;
         this.y = 0; // 실제 y값은 게임 루프에서 동적으로 결정
-        this.width = 20;
-        this.height = 22;
+        this.width = 17;
+        this.height = 19;
     }
     draw() {
         ctx.drawImage(cactusImg, this.x, this.y, this.width, this.height);
@@ -126,15 +126,15 @@ function init() {
 
     if (timer % 500 === 0) gameSpeed += 0.2;
 
-    // cactus 등장 간격: 0, 0.5, 1.0, 1.5, 2.0초 중 랜덤
+    // cactus 등장 간격: 1, 2, 3, 4초 중 랜덤
     if (timer >= nextCactusTime) {
         cactuses.push(new Cactus());
-        let intervals = [0, 0.5, 1.0, 1.5, 2.0];
+        let intervals = [1, 2, 3, 4];
         let interval;
         while (true) {
             interval = intervals[Math.floor(Math.random() * intervals.length)];
-            // 0.5초 이후(1.0, 1.5, ...) 또는 0이 두 번 연속일 때 최소 1.0초 간격
-            if (interval > 0.5) {
+            // 1초 이상 간격
+            if (interval > 1.0) {
                 if (lastCactusInterval < 1.0) {
                     interval = 1.0;
                 }
@@ -210,7 +210,7 @@ function init() {
 function collisionDetect(character, cactus) {
     let xDiff = cactus.x - (character.x + character.width);
     let yDiff = cactus.y - (character.y + character.height);
-    if (xDiff < -15 && yDiff < -15) {
+    if (xDiff < -20 && yDiff < -20) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         cancelAnimationFrame(animation);
         // 게임 오버 UI 표시
