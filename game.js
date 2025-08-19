@@ -52,6 +52,7 @@ let character = {
     y: 0, // 실제 y값은 게임 루프에서 동적으로 결정
     width: 150,
     height: 150,
+    groundY: 0, // 착지 위치(배경 기준)
     draw() {
         ctx.drawImage(selectedCharImg, this.x, this.y, this.width, this.height);
     }
@@ -111,9 +112,9 @@ function init() {
     let drawY = (canvas.height - drawHeight) / 2;
     ctx.drawImage(bgImg, drawX, drawY, drawWidth, drawHeight);
 
-    // 캐릭터와 cactus의 y값을 배경 위에서 2/3 지점에 위치
+    // 캐릭터와 cactus의 착지 위치를 배경 위에서 2/3 지점에 설정
     let groundY = drawY + drawHeight * 2 / 3;
-    character.y = groundY;
+    character.groundY = groundY;
     cactuses.forEach(cactus => {
         cactus.y = groundY + 5;
     });
@@ -181,13 +182,14 @@ function init() {
     });
 
     // 점프 처리 + 이미지 변경 (이중 점프)
+    if (character.y === 0) character.y = character.groundY; // 최초 위치 지정
     if (isJump) {
         selectedCharImg.src = jumpImageSrc;
         character.y -= 5; // 점프 속도 조정
         jumpTimer++;
     } else {
         selectedCharImg.src = normalImageSrc;
-        if (character.y < canvas.height - 100) character.y += 5;
+        if (character.y < character.groundY) character.y += 5; // 착지
     }
 
     if (jumpTimer > 50) {
@@ -203,7 +205,7 @@ function init() {
 function collisionDetect(character, cactus) {
     let xDiff = cactus.x - (character.x + character.width);
     let yDiff = cactus.y - (character.y + character.height);
-    if (xDiff < -5 && yDiff < -15) {
+    if (xDiff < -15 && yDiff < -15) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         cancelAnimationFrame(animation);
         // 게임 오버 UI 표시
