@@ -290,6 +290,7 @@ selectDiv.addEventListener("click", (e) => {
 
 // 캐릭터 선택창을 배경 영역 안에 위치시키는 함수
 function showCharacterSelectBackground() {
+    bgImg.src = background_dir + '/morning.png'; // 캐릭터 선택 시 배경을 morning으로 고정
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     let morningImg = new Image();
     morningImg.src = './img/background/morning.png';
