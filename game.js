@@ -290,27 +290,32 @@ selectDiv.addEventListener("click", (e) => {
 // 캐릭터 선택창을 배경 영역 안에 위치시키는 함수
 function showCharacterSelectBackground() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    let bgRatio = bgImg.width / bgImg.height;
-    let canvasRatio = canvas.width / canvas.height;
-    let drawWidth, drawHeight;
-    if (canvasRatio > bgRatio) {
-        drawHeight = canvas.height;
-        drawWidth = bgImg.width * (canvas.height / bgImg.height);
-    } else {
-        drawWidth = canvas.width;
-        drawHeight = bgImg.height * (canvas.width / bgImg.width);
+    // morning.png를 항상 배경으로 사용
+    let morningImg = new Image();
+    morningImg.src = background_dir + '/morning.png';
+    morningImg.onload = function() {
+        let bgRatio = morningImg.width / morningImg.height;
+        let canvasRatio = canvas.width / canvas.height;
+        let drawWidth, drawHeight;
+        if (canvasRatio > bgRatio) {
+            drawHeight = canvas.height;
+            drawWidth = morningImg.width * (canvas.height / morningImg.height);
+        } else {
+            drawWidth = canvas.width;
+            drawHeight = morningImg.height * (canvas.width / morningImg.width);
+        }
+        let drawX = (canvas.width - drawWidth) / 2;
+        let drawY = (canvas.height - drawHeight) / 2;
+        ctx.drawImage(morningImg, drawX, drawY, drawWidth, drawHeight);
+        // 캐릭터 선택창 위치 조정 (background 영역 안)
+        selectDiv.style.position = 'absolute';
+        selectDiv.style.left = `${drawX + 40}px`;
+        selectDiv.style.top = `${drawY + drawHeight * 0.55}px`;
+        selectDiv.style.width = `${drawWidth - 80}px`;
+        selectDiv.style.height = 'auto';
+        selectDiv.style.background = 'rgba(255,255,255,0.0)';
+        selectDiv.style.zIndex = '10';
     }
-    let drawX = (canvas.width - drawWidth) / 2;
-    let drawY = (canvas.height - drawHeight) / 2;
-    ctx.drawImage(bgImg, drawX, drawY, drawWidth, drawHeight);
-    // 캐릭터 선택창 위치 조정 (background 영역 안)
-    selectDiv.style.position = 'absolute';
-    selectDiv.style.left = `${drawX + 40}px`;
-    selectDiv.style.top = `${drawY + drawHeight * 0.55}px`;
-    selectDiv.style.width = `${drawWidth - 80}px`;
-    selectDiv.style.height = 'auto';
-    selectDiv.style.background = 'rgba(255,255,255,0.0)';
-    selectDiv.style.zIndex = '10';
 }
 
 // --- 이미지 로딩 후 게임 시작 ---
