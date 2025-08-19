@@ -48,7 +48,7 @@ let normalImageSrc, jumpImageSrc;
 
 // character
 let character = {
-    x: 10,
+    x: 60, // 화면 왼쪽에서 약간 띄워서 시작
     y: 0, // 실제 y값은 게임 루프에서 동적으로 결정
     width: 120, // 기준 너비
     height: 120, // 기준 높이(이미지 비율에 따라 동적으로 변경)
@@ -65,7 +65,7 @@ let character = {
 // cactus 클래스
 class Cactus {
     constructor() {
-        this.x = canvas.width;
+        this.x = canvas.width - 80; // 화면 오른쪽에서 약간 띄워서 등장
         this.y = 0; // 실제 y값은 게임 루프에서 동적으로 결정
         this.width = 17;
         this.height = 19;
@@ -214,7 +214,7 @@ function init() {
     if (character.y === 0) character.y = character.groundY; // 최초 위치 지정
     if (isJump) {
         selectedCharImg.src = jumpImageSrc;
-        character.y -= 15; // 점프 높이 증가
+        character.y -= 35; // 점프 높이 증가
         jumpTimer++;
     } else {
         selectedCharImg.src = normalImageSrc;
@@ -314,14 +314,16 @@ function showCharacterSelectBackground() {
         let drawX = (canvas.width - drawWidth) / 2;
         let drawY = (canvas.height - drawHeight) / 2;
         ctx.drawImage(morningImg, drawX, drawY, drawWidth, drawHeight);
-        // 캐릭터 선택창 위치 조정 (background 영역 안)
+        // 캐릭터 선택창 위치 조정 (background 영역 중앙)
         selectDiv.style.position = 'absolute';
-        selectDiv.style.left = `${drawX + 40}px`;
-        selectDiv.style.top = `${drawY + drawHeight * 0.2}px`;
-        selectDiv.style.width = `${drawWidth - 80}px`;
-        selectDiv.style.height = 'auto';
+        selectDiv.style.left = `${drawX + drawWidth/2 - selectDiv.offsetWidth/2}px`;
+        selectDiv.style.top = `${drawY + drawHeight/2 - selectDiv.offsetHeight/2}px`;
+        selectDiv.style.width = '';
+        selectDiv.style.height = '';
         selectDiv.style.background = 'rgba(255,255,255,0.0)';
         selectDiv.style.zIndex = '10';
+        selectDiv.style.justifyItems = 'center';
+        selectDiv.style.alignItems = 'center';
     }
     if (morningImg.complete) morningImg.onload();
 }
