@@ -49,9 +49,9 @@ let normalImageSrc, jumpImageSrc;
 // character
 let character = {
     x: 10,
-    y: canvas.height - 50, // 화면 아래쪽으로
-    width: 400,
-    height: 400,
+    y: canvas.height - 10, // 화면 아래쪽으로
+    width: 150,
+    height: 150,
     draw() {
         ctx.drawImage(selectedCharImg, this.x, this.y, this.width, this.height);
     }
@@ -61,7 +61,7 @@ let character = {
 class Cactus {
     constructor() {
         this.x = canvas.width;
-        this.y = canvas.height - 45; // character.y 맞춤
+        this.y = canvas.height - 5; // character.y 맞춤
         this.width = 40;
         this.height = 45;
     }
@@ -113,17 +113,17 @@ function init() {
 
     if (timer % 500 === 0) gameSpeed += 0.2;
 
-    // cactus 등장 간격: 0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8초 중 랜덤
+    // cactus 등장 간격: 0, 0.5, 1.0, 1.5, 2.0초 중 랜덤
     if (timer >= nextCactusTime) {
         cactuses.push(new Cactus());
-        let intervals = [0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8];
+        let intervals = [0, 0.5, 1.0, 1.5, 2.0];
         let interval;
         while (true) {
             interval = intervals[Math.floor(Math.random() * intervals.length)];
-            // 0.3초 이후(0.6, 0.9, ...) 또는 0이 두 번 연속일 때 최소 0.9초 간격
-            if (interval > 0.3) {
-                if (lastCactusInterval < 0.9) {
-                    interval = 0.9;
+            // 0.5초 이후(1.0, 1.5, ...) 또는 0이 두 번 연속일 때 최소 1.0초 간격
+            if (interval > 0.5) {
+                if (lastCactusInterval < 1.0) {
+                    interval = 1.0;
                 }
                 break;
             } else if (interval === 0) {
