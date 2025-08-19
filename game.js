@@ -192,6 +192,12 @@ canvas.addEventListener('touchstart', function(e) {
 
 // --- 캐릭터 선택 ---
 const selectDiv = document.getElementById("characterSelect");
+// 캐릭터 선택 화면을 2~3줄로 정렬하는 CSS 적용
+selectDiv.style.display = 'grid';
+selectDiv.style.gridTemplateColumns = 'repeat(3, 1fr)';
+selectDiv.style.gap = '20px';
+selectDiv.style.justifyItems = 'center';
+selectDiv.style.alignItems = 'center';
 selectDiv.addEventListener("click", (e) => {
     if(e.target.tagName === "IMG") {
         normalImageSrc = e.target.src;
