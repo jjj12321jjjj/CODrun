@@ -206,7 +206,7 @@ function init() {
     if (character.y === 0) character.y = character.groundY; // 최초 위치 지정
     if (isJump) {
         selectedCharImg.src = jumpImageSrc;
-        character.y -= 10; // 점프 높이 증가
+        character.y -= 15; // 점프 높이 증가
         jumpTimer++;
     } else {
         selectedCharImg.src = normalImageSrc;
@@ -290,7 +290,6 @@ selectDiv.addEventListener("click", (e) => {
 // 캐릭터 선택창을 배경 영역 안에 위치시키는 함수
 function showCharacterSelectBackground() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // morning.png를 항상 배경으로 사용
     let morningImg = new Image();
     morningImg.src = background_dir + '/morning.png';
     morningImg.onload = function() {
@@ -307,7 +306,6 @@ function showCharacterSelectBackground() {
         let drawX = (canvas.width - drawWidth) / 2;
         let drawY = (canvas.height - drawHeight) / 2;
         ctx.drawImage(morningImg, drawX, drawY, drawWidth, drawHeight);
-        // 캐릭터 선택창 위치 조정 (background 영역 안)
         selectDiv.style.position = 'absolute';
         selectDiv.style.left = `${drawX + 40}px`;
         selectDiv.style.top = `${drawY + drawHeight * 0.55}px`;
@@ -316,6 +314,7 @@ function showCharacterSelectBackground() {
         selectDiv.style.background = 'rgba(255,255,255,0.0)';
         selectDiv.style.zIndex = '10';
     }
+    if (morningImg.complete) morningImg.onload();
 }
 
 // --- 이미지 로딩 후 게임 시작 ---
