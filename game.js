@@ -109,6 +109,14 @@ function init() {
     let drawY = (canvas.height - drawHeight) / 2;
     ctx.drawImage(bgImg, drawX, drawY, drawWidth, drawHeight);
 
+    // 점수 표시 (배경 기준 좌측 상단)
+    ctx.save();
+    ctx.font = 'bold 32px sans-serif';
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'left';
+    ctx.fillText(`점수: ${score}`, drawX + 20, drawY + 40);
+    ctx.restore();
+
     // 점수 표시 (배경 기준 왼쪽 상단)
     ctx.save();
     ctx.font = 'bold 32px sans-serif';
@@ -291,7 +299,7 @@ selectDiv.addEventListener("click", (e) => {
 function showCharacterSelectBackground() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     let morningImg = new Image();
-    morningImg.src = background_dir + '/morning.png';
+    morningImg.src = './img/background/morning.png';
     morningImg.onload = function() {
         let bgRatio = morningImg.width / morningImg.height;
         let canvasRatio = canvas.width / canvas.height;
@@ -306,9 +314,10 @@ function showCharacterSelectBackground() {
         let drawX = (canvas.width - drawWidth) / 2;
         let drawY = (canvas.height - drawHeight) / 2;
         ctx.drawImage(morningImg, drawX, drawY, drawWidth, drawHeight);
+        // 캐릭터 선택창 위치 조정 (background 영역 안)
         selectDiv.style.position = 'absolute';
         selectDiv.style.left = `${drawX + 40}px`;
-        selectDiv.style.top = `${drawY + drawHeight * 0.55}px`;
+        selectDiv.style.top = `${drawY + drawHeight * 0.2}px`;
         selectDiv.style.width = `${drawWidth - 80}px`;
         selectDiv.style.height = 'auto';
         selectDiv.style.background = 'rgba(255,255,255,0.0)';
