@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    showCharacterSelectBackground(); // 최초 로딩 시 캐릭터 선택 배경을 morning으로 그림
 // --- 재시작/점수 UI 생성 ---
 let restartDiv = document.createElement('div');
 restartDiv.id = 'restartDiv';
