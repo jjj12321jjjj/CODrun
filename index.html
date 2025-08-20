@@ -1,70 +1,49 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>COD Runner</title>
-<style>
+  <meta charset="UTF-8">
+  <title>Dino Run</title>
+  <style>
+    body {
+      margin: 0;
+      text-align: center;
+      background: #fafafa;
+      font-family: Arial, sans-serif;
+    }
     #characterSelect {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
-    justify-items: center;
-    align-items: center;
-    position: absolute;
-    z-index: 10;
+      margin-top: 100px;
     }
-    .character-item {
-    display: flex;
-    flex-direction: column;
+    button {
+      font-size: 18px;
+      margin: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
     }
-    .character-name {
-    margin-top: 8px;
-    font-size: 1.1em;
-    color: #222;
-    font-weight: bold;
-    font-family: sans-serif;
-    text-align: center;
+    canvas {
+      display: none;
+      border: 1px solid #000;
+      margin-top: 20px;
     }
-    #characterSelect img {
-    width: 140px;
-    height: 140px;
-    object-fit: contain;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: 0.2s;
-    }
-    #characterSelect img:hover {
-    border-color: gold;
-    }
-</style>
+  </style>
 </head>
 <body>
+  <!-- 캐릭터 선택 화면 -->
+  <div id="characterSelect">
+    <h1>캐릭터 선택하기</h1>
+    <button onclick="selectCharacter('horangi')">호랑이</button>
+    <button onclick="selectCharacter('konig')">Konig</button>
+    <button onclick="selectCharacter('krueger1')">Krueger1</button>
+    <button onclick="selectCharacter('krueger2')">Krueger2</button>
+    <button onclick="selectCharacter('nikto')">Nikto</button>
+  </div>
 
-<div id="characterSelect">
-    <div class="character-item">
-        <img src="./img/character/konig.png" alt="Konig">
-        <span class="character-name">Konig</span>
-    </div>
-    <div class="character-item">
-        <img src="./img/character/horangi.png" alt="Horangi">
-        <span class="character-name">Horangi</span>
-    </div>
-    <div class="character-item">
-        <img src="./img/character/krueger1.png" alt="Krueger1">
-        <span class="character-name">Krueger</span>
-    </div>
-    <div class="character-item">
-        <img src="./img/character/krueger2.png" alt="Krueger2">
-        <span class="character-name">Krueger</span>
-    </div>
-    <div class="character-item">
-        <img src="./img/character/nikto.png" alt="Nikto">
-        <span class="character-name">Nikto</span>
-    </div>
-</div>
+  <!-- 게임 캔버스 -->
+  <canvas id="gameCanvas" width="800" height="400"></canvas>
 
-<canvas id="canvas"></canvas>
+  <!-- 선인장 이미지 -->
+  <img id="cactusImg" src="img/cactus.png" style="display:none" alt="cactus">
 
-<script src="game.js"></script>
+  <!-- 게임 스크립트 -->
+  <script src="game.js"></script>
 </body>
 </html>
