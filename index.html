@@ -1,71 +1,61 @@
-let canvas = document.getElementById("gameCanvas");
-let ctx = canvas.getContext("2d");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CoD running</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f0f0f0;
+    }
 
-let gameInterval;
-let gameSpeed = 2;
-let gravity = 0.6;
-let score = 0;
-let obstacles = [];
+    #character-selection {
+      margin-top: 50px;
+    }
 
-let dino;
-let selectedCharacter = null;
+    .character-grid {
+      display: grid;
+      grid-template-columns: repeat(2, auto);
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
 
-// 배경 이미지들
-let backgrounds = {
-  morning: new Image(),
-  evening: new Image(),
-  night: new Image()
-};
-backgrounds.morning.src = "img/background/morning.png";
-backgrounds.evening.src = "img/background/evening.png";
-backgrounds.night.src = "img/background/night.png";
+    .character-grid img {
+      width: 120px;  /* 기존보다 크게 (2~3배) */
+      height: auto;  /* 비율 유지 */
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
 
-function selectCharacter(character) {
-  selectedCharacter = new Image();
-  selectedCharacter.src = `img/character/${character}.png`;
+    .character-grid img:hover {
+      transform: scale(1.1);
+    }
 
-  dino = {
-    x: 50,
-    y: canvas.height - 180, // 크기 커지니까 Y값 조정
-    width: 120,             // 기존보다 2~3배 크게
-    height: 120,
-    dy: 0,
-    jumpPower: -15,
-    isJumping: false,
-    img: selectedCharacter
-  };
+    #gameCanvas {
+      display: none;
+      background: #ffffff;
+      margin: 20px auto;
+      border: 1px solid #000;
+    }
+  </style>
+</head>
+<body>
+  <div id="character-selection">
+    <h1>CoD running</h1>
+    <div class="character-grid">
+      <img src="img/character/horangi.png" alt="Horangi" data-character="horangi">
+      <img src="img/character/konig.png" alt="Konig" data-character="konig">
+      <img src="img/character/krueger1.png" alt="Krueger1" data-character="krueger1">
+      <img src="img/character/krueger2.png" alt="Krueger2" data-character="krueger2">
+      <img src="img/character/nikto.png" alt="Nikto" data-character="nikto">
+    </div>
+  </div>
 
-  document.getElementById("characterSelect").style.display = "none";
-  canvas.style.display = "block";
+  <canvas id="gameCanvas" width="800" height="300"></canvas>
 
-  startGame();
-}
-
-function startGame() {
-  document.addEventListener("keydown", jump);
-  gameInterval = setInterval(update, 1000 / 60);
-}
-
-function jump(e) {
-  if (e.code === "Space" && !dino.isJumping) {
-    dino.dy = dino.jumpPower;
-    dino.isJumping = true;
-  }
-}
-
-function getBackgroundByScore() {
-  if (score < 1000) {
-    return backgrounds.morning;
-  } else if (score < 2000) {
-    return backgrounds.evening;
-  } else {
-    return backgrounds.night;
-  }
-}
-
-function update() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // 배경 (점수 기반 변경)
-  let bg = getBackgroundByScore();
-  ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+  <script src="game.js"></script>
+</body>
+</html>
