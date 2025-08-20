@@ -19,19 +19,30 @@
       display: grid;
       grid-template-columns: repeat(2, auto);
       justify-content: center;
-      gap: 20px;
+      gap: 30px;
       margin-top: 20px;
     }
 
-    .character-grid img {
-      width: 120px;  /* 기존보다 크게 (2~3배) */
+    .character-card {
+      text-align: center;
+    }
+
+    .character-card img {
+      width: 120px;
       height: auto;  /* 비율 유지 */
       cursor: pointer;
       transition: transform 0.2s;
+      display: block;
+      margin: 0 auto;
     }
 
-    .character-grid img:hover {
+    .character-card img:hover {
       transform: scale(1.1);
+    }
+
+    .character-card p {
+      margin-top: 8px;
+      font-weight: bold;
     }
 
     #gameCanvas {
@@ -46,11 +57,26 @@
   <div id="character-selection">
     <h1>CoD running</h1>
     <div class="character-grid">
-      <img src="img/character/horangi.png" alt="Horangi" data-character="horangi">
-      <img src="img/character/konig.png" alt="Konig" data-character="konig">
-      <img src="img/character/krueger1.png" alt="Krueger1" data-character="krueger1">
-      <img src="img/character/krueger2.png" alt="Krueger2" data-character="krueger2">
-      <img src="img/character/nikto.png" alt="Nikto" data-character="nikto">
+      <div class="character-card">
+        <img src="img/character/horangi.png" alt="Horangi" data-character="horangi">
+        <p>Horangi</p>
+      </div>
+      <div class="character-card">
+        <img src="img/character/konig.png" alt="Konig" data-character="konig">
+        <p>Konig</p>
+      </div>
+      <div class="character-card">
+        <img src="img/character/krueger1.png" alt="Krueger1" data-character="krueger1">
+        <p>Krueger1</p>
+      </div>
+      <div class="character-card">
+        <img src="img/character/krueger2.png" alt="Krueger2" data-character="krueger2">
+        <p>Krueger2</p>
+      </div>
+      <div class="character-card">
+        <img src="img/character/nikto.png" alt="Nikto" data-character="nikto">
+        <p>Nikto</p>
+      </div>
     </div>
   </div>
 
