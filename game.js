@@ -37,8 +37,8 @@ document.querySelectorAll(".character-card img").forEach(img => {
 let character = {
   x: 50,
   y: 200,
-  width: 60,
-  height: 60,
+  width: 250,
+  height: 250,
   dy: 0,
   gravity: 0.6,
   jumpPower: -12,
@@ -47,9 +47,9 @@ let character = {
 
 let cactus = {
   x: 800,
-  y: 230,
-  width: 40,
-  height: 45
+  y: 210,
+  width: 35,
+  height: 40
 };
 
 let gameSpeed = 2;
