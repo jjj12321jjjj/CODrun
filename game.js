@@ -19,7 +19,8 @@ document.querySelectorAll(".character-card img").forEach(img => {
   img.addEventListener("click", () => {
     selectedCharacter = img.dataset.character;
     characterImg.src = `img/character/${selectedCharacter}.png`;
-    characterJumpImg.src = `img/character/${selectedCharacter}_jump.png`;
+    // characterJumpImg.src = `img/character/${selectedCharacter}_jump.png`;
+    characterJumpImg.src = `img/character/${selectedCharacter}.png`;
 
     // 점프 이미지 없으면 fallback
     characterJumpImg.onerror = () => {
