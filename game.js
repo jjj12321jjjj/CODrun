@@ -26,11 +26,11 @@ function selectCharacter(character) {
 
   dino = {
     x: 50,
-    y: canvas.height - 100,
-    width: 50,
-    height: 50,
+    y: canvas.height - 180, // 크기 커지니까 Y값 조정
+    width: 120,             // 기존보다 2~3배 크게
+    height: 120,
     dy: 0,
-    jumpPower: -12,
+    jumpPower: -15,
     isJumping: false,
     img: selectedCharacter
   };
