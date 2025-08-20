@@ -1,120 +1,130 @@
-let canvas = document.getElementById("gameCanvas");
-let ctx = canvas.getContext("2d");
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 
-let gameInterval;
-let gameSpeed = 2;
-let gravity = 0.6;
-let score = 0;
-let obstacles = [];
-
-let dino;
 let selectedCharacter = null;
+let dinoImg = new Image();
+let dinoJumpImg = new Image();
+let cactusImg = new Image();
+let backgroundMorning = new Image();
+let backgroundEvening = new Image();
+let backgroundNight = new Image();
 
-// 배경 이미지들
-let backgrounds = {
-  morning: new Image(),
-  evening: new Image(),
-  night: new Image()
+cactusImg.src = "img/cactus.png";
+backgroundMorning.src = "img/background/morning.png";
+backgroundEvening.src = "img/background/evening.png";
+backgroundNight.src = "img/background/night.png";
+
+// 캐릭터 선택
+document.querySelectorAll(".character-grid img").forEach(img => {
+  img.addEventListener("click", () => {
+    selectedCharacter = img.dataset.character;
+    dinoImg.src = `img/character/${selectedCharacter}.png`;
+    dinoJumpImg.src = `img/character/${selectedCharacter}_jump.png`;
+
+    document.getElementById("character-selection").style.display = "none";
+    canvas.style.display = "block";
+
+    startGame();
+  });
+});
+
+let dino = {
+  x: 50,
+  y: 200,
+  width: 50,
+  height: 50,
+  dy: 0,
+  gravity: 0.6,
+  jumpPower: -12,
+  isJumping: false
 };
-backgrounds.morning.src = "img/background/morning.png";
-backgrounds.evening.src = "img/background/evening.png";
-backgrounds.night.src = "img/background/night.png";
 
-function selectCharacter(character) {
-  selectedCharacter = new Image();
-  selectedCharacter.src = `img/character/${character}.png`;
+let cactus = {
+  x: 800,
+  y: 230,
+  width: 40,
+  height: 45
+};
 
-  dino = {
-    x: 50,
-    y: canvas.height - 180, // 크기 커지니까 Y값 조정
-    width: 120,             // 기존보다 2~3배 크게
-    height: 120,
-    dy: 0,
-    jumpPower: -15,
-    isJumping: false,
-    img: selectedCharacter
-  };
+let gameSpeed = 2;
+let timer = 0;
+let score = 0;
+let isGameOver = false;
 
-  document.getElementById("characterSelect").style.display = "none";
-  canvas.style.display = "block";
+function drawBackground() {
+  let bg;
+  if (timer < 5000) bg = backgroundMorning;
+  else if (timer < 10000) bg = backgroundEvening;
+  else bg = backgroundNight;
 
-  startGame();
+  ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
 }
 
-function startGame() {
-  document.addEventListener("keydown", jump);
-  gameInterval = setInterval(update, 1000 / 60);
-}
-
-function jump(e) {
-  if (e.code === "Space" && !dino.isJumping) {
-    dino.dy = dino.jumpPower;
-    dino.isJumping = true;
-  }
-}
-
-function getBackgroundByScore() {
-  if (score < 1000) {
-    return backgrounds.morning;
-  } else if (score < 2000) {
-    return backgrounds.evening;
+function drawDino() {
+  if (dino.isJumping) {
+    ctx.drawImage(dinoJumpImg, dino.x, dino.y, dino.width, dino.height);
   } else {
-    return backgrounds.night;
+    ctx.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
   }
+}
+
+function drawCactus() {
+  ctx.drawImage(cactusImg, cactus.x, cactus.y, cactus.width, cactus.height);
 }
 
 function update() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (isGameOver) return;
 
-  // 배경 (점수 기반 변경)
-  let bg = getBackgroundByScore();
-  ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+  timer++;
 
-  // Dino 업데이트
+  // 배경
+  drawBackground();
+
+  // 공룡
   dino.y += dino.dy;
-  if (dino.y + dino.height < canvas.height) {
-    dino.dy += gravity;
+  if (dino.y + dino.height < 250) {
+    dino.dy += dino.gravity;
   } else {
-    dino.y = canvas.height - dino.height;
+    dino.y = 200;
+    dino.dy = 0;
     dino.isJumping = false;
   }
+  drawDino();
 
-  ctx.drawImage(dino.img, dino.x, dino.y, dino.width, dino.height);
+  // 장애물
+  cactus.x -= gameSpeed;
+  if (cactus.x + cactus.width < 0) {
+    cactus.x = 800 + Math.random() * 200;
+    score++;
+  }
+  drawCactus();
 
-  // 장애물 생성
-  if (Math.random() < 0.01) {
-    obstacles.push({
-      x: canvas.width,
-      y: canvas.height - 45,
-      width: 40,
-      height: 45,
-      img: document.getElementById("cactusImg")
-    });
+  // 충돌 검사
+  if (
+    dino.x < cactus.x + cactus.width &&
+    dino.x + dino.width > cactus.x &&
+    dino.y < cactus.y + cactus.height &&
+    dino.y + dino.height > cactus.y
+  ) {
+    isGameOver = true;
+    alert("Game Over! Score: " + score);
+    document.location.reload();
   }
 
-  // 장애물 이동/충돌 체크
-  for (let i = 0; i < obstacles.length; i++) {
-    let obs = obstacles[i];
-    obs.x -= gameSpeed;
-    ctx.drawImage(obs.img, obs.x, obs.y, obs.width, obs.height);
+  // 속도 증가 (점진적)
+  if (timer % 800 === 0) {
+    gameSpeed += 0.2;
+  }
 
-    if (
-      dino.x < obs.x + obs.width &&
-      dino.x + dino.width > obs.x &&
-      dino.y < obs.y + obs.height &&
-      dino.y + dino.height > obs.y
-    ) {
-      clearInterval(gameInterval);
-      alert("게임 오버! 점수: " + score);
-      document.location.reload();
+  requestAnimationFrame(update);
+}
+
+function startGame() {
+  document.addEventListener("keydown", (e) => {
+    if (e.code === "Space" && !dino.isJumping) {
+      dino.dy = dino.jumpPower;
+      dino.isJumping = true;
     }
-  }
-
-  // 점수 및 난이도
-  score++;
-  if (score % 500 === 0) gameSpeed += 0.2;
-
-  ctx.fillStyle = "#000";
-  ctx.font = "20px Arial";
-  ctx.fillText("점수: " + score, 10, 30);
+  });
+  update();
 }
