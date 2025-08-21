@@ -37,6 +37,7 @@
       padding: 10px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
       transition: transform 0.2s;
+      width: 80px;
     }
 
     .character-card:hover {
@@ -44,8 +45,9 @@
     }
 
     .character-card img {
-      width: 70px;   /* 가로 고정 */
-      height: auto;  /* 세로는 원본 비율 유지 */
+      width: 40px;   /* ✅ 선택 화면에서는 40×40 고정 */
+      height: 40px;
+      object-fit: contain;
     }
 
     .character-name {
@@ -53,6 +55,7 @@
       font-size: 14px;
       font-weight: bold;
       color: #222;
+      text-align: center;
     }
 
     canvas {
@@ -68,16 +71,32 @@
 
   <div id="character-selection">
     <div class="character-card">
-      <img src="img/character/dino1.png" data-character="dino1" alt="Dino 1">
-      <div class="character-name">Dino 1</div>
+      <img src="img/character/ghost.png" data-character="ghost" alt="Ghost">
+      <div class="character-name">Ghost</div>
     </div>
     <div class="character-card">
-      <img src="img/character/dino2.png" data-character="dino2" alt="Dino 2">
-      <div class="character-name">Dino 2</div>
+      <img src="img/character/horangi.png" data-character="horangi" alt="Horangi">
+      <div class="character-name">Horangi</div>
     </div>
     <div class="character-card">
-      <img src="img/character/dino3.png" data-character="dino3" alt="Dino 3">
-      <div class="character-name">Dino 3</div>
+      <img src="img/character/konig.png" data-character="konig" alt="Konig">
+      <div class="character-name">Konig</div>
+    </div>
+    <div class="character-card">
+      <img src="img/character/krueger1.png" data-character="krueger1" alt="Krueger 1">
+      <div class="character-name">Krueger 1</div>
+    </div>
+    <div class="character-card">
+      <img src="img/character/krueger2.png" data-character="krueger2" alt="Krueger 2">
+      <div class="character-name">Krueger 2</div>
+    </div>
+    <div class="character-card">
+      <img src="img/character/nikto.png" data-character="nikto" alt="Nikto">
+      <div class="character-name">Nikto</div>
+    </div>
+    <div class="character-card">
+      <img src="img/character/zero.png" data-character="zero" alt="Zero">
+      <div class="character-name">Zero</div>
     </div>
   </div>
 
