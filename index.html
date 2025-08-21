@@ -1,94 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CoD Running</title>
   <style>
     body {
       margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: url("img/background/morning.png") no-repeat center center fixed;
-      background-size: cover;
-    }
-
-    h1 {
-      margin: 20px 0;
-    }
-
-    #character-selection {
       display: flex;
-      flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
-      margin-top: 50px;
-    }
-
-    .character-card {
-      display: flex;
-      flex-direction: column;
       align-items: center;
-      width: 100px;
+      height: 100vh;
+      background: #fff; /* ← CSS 배경 제거 */
     }
-
-    .character-card img {
+    #character-selection {
+      text-align: center;
+    }
+    .character-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      justify-items: center;
+    }
+    .character-option {
+      cursor: pointer;
+    }
+    .character-option img {
       width: 40px;
       height: 40px;
       object-fit: contain;
-      cursor: pointer;
-    }
-
-    .character-name {
-      margin-top: 5px;
-      font-size: 14px;
-      font-weight: bold;
-      color: white;
-      text-shadow: 1px 1px 2px black;
-    }
-
-    canvas {
-      display: none;
-      background: url("img/background/morning.png") no-repeat center center;
-      background-size: cover;
-      margin-top: 20px;
+      display: block;
+      margin: 0 auto;
     }
   </style>
 </head>
 <body>
-  <h1>CoD Running</h1>
   <div id="character-selection">
-    <div class="character-card">
-      <img src="img/character/ghost.png" data-character="ghost">
-      <div class="character-name">Ghost</div>
-    </div>
-    <div class="character-card">
-      <img src="img/character/horangi.png" data-character="horangi">
-      <div class="character-name">Horangi</div>
-    </div>
-    <div class="character-card">
-      <img src="img/character/konig.png" data-character="konig">
-      <div class="character-name">Konig</div>
-    </div>
-    <div class="character-card">
-      <img src="img/character/krueger1.png" data-character="krueger1">
-      <div class="character-name">Krueger1</div>
-    </div>
-    <div class="character-card">
-      <img src="img/character/krueger2.png" data-character="krueger2">
-      <div class="character-name">Krueger2</div>
-    </div>
-    <div class="character-card">
-      <img src="img/character/nikto.png" data-character="nikto">
-      <div class="character-name">Nikto</div>
-    </div>
-    <div class="character-card">
-      <img src="img/character/zero.png" data-character="zero">
-      <div class="character-name">Zero</div>
+    <h1>CoD Running</h1>
+    <div class="character-grid">
+      <div class="character-option" onclick="selectCharacter('ghost')">
+        <img src="img/character/ghost.png" alt="Ghost" />
+        <p>Ghost</p>
+      </div>
+      <div class="character-option" onclick="selectCharacter('horangi')">
+        <img src="img/character/horangi.png" alt="Horangi" />
+        <p>Horangi</p>
+      </div>
+      <div class="character-option" onclick="selectCharacter('konig')">
+        <img src="img/character/konig.png" alt="Konig" />
+        <p>Konig</p>
+      </div>
+      <div class="character-option" onclick="selectCharacter('krueger1')">
+        <img src="img/character/krueger1.png" alt="Krueger1" />
+        <p>Krueger1</p>
+      </div>
+      <div class="character-option" onclick="selectCharacter('krueger2')">
+        <img src="img/character/krueger2.png" alt="Krueger2" />
+        <p>Krueger2</p>
+      </div>
+      <div class="character-option" onclick="selectCharacter('nikto')">
+        <img src="img/character/nikto.png" alt="Nikto" />
+        <p>Nikto</p>
+      </div>
+      <div class="character-option" onclick="selectCharacter('zero')">
+        <img src="img/character/zero.png" alt="Zero" />
+        <p>Zero</p>
+      </div>
     </div>
   </div>
 
-  <canvas id="gameCanvas" width="800" height="300"></canvas>
+  <canvas id="gameCanvas" width="800" height="300" style="display:none;"></canvas>
 
   <script src="game.js"></script>
 </body>
