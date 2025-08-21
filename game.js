@@ -26,7 +26,7 @@ let cactusHeight = 40;
 
 let charX = 50;
 let charY = 0;
-let charWidth = 40;
+let charWidth = 40; // ✅ 고정
 let charHeight = 40;
 let isJumping = false;
 let jumpHeight = 0;
@@ -35,7 +35,6 @@ function selectCharacter(name) {
   character = name;
   characterImg.src = `img/character/${character}.png`;
 
-  // 이미지 로드 확인
   if (characterImg.complete) {
     characterLoaded = true;
     startGame();
