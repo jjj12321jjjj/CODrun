@@ -1,107 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CoD running</title>
+  <meta charset="UTF-8">
+  <title>CoD Running</title>
   <style>
     body {
+      margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
       text-align: center;
       background: url("img/background/morning.png") no-repeat center center fixed;
       background-size: cover;
-      margin: 0;
-      padding: 0;
     }
 
     h1 {
-      margin-top: 20px;
-      color: #333;
+      margin: 20px 0;
     }
 
     #character-selection {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr); /* ✅ 한 줄에 3개 */
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 20px;
-      justify-items: center;
-      margin-top: 30px;
-      padding: 0 20px;
+      margin-top: 50px;
     }
 
     .character-card {
       display: flex;
       flex-direction: column;
       align-items: center;
-      cursor: pointer;
-      background: rgba(255,255,255,0.8);
-      border-radius: 12px;
-      padding: 10px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
-      width: 80px;
-    }
-
-    .character-card:hover {
-      transform: scale(1.1);
+      width: 100px;
     }
 
     .character-card img {
       width: 40px;
       height: 40px;
       object-fit: contain;
+      cursor: pointer;
     }
 
     .character-name {
-      margin-top: 8px;
+      margin-top: 5px;
       font-size: 14px;
       font-weight: bold;
-      color: #222;
-      text-align: center;
+      color: white;
+      text-shadow: 1px 1px 2px black;
     }
 
     canvas {
       display: none;
-      background: #fff;
-      border: 1px solid #ccc;
+      background: url("img/background/morning.png") no-repeat center center;
+      background-size: cover;
       margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>CoD running</h1>
-
+  <h1>CoD Running</h1>
   <div id="character-selection">
     <div class="character-card">
-      <img src="img/character/ghost.png" data-character="ghost" alt="Ghost">
+      <img src="img/character/ghost.png" data-character="ghost">
       <div class="character-name">Ghost</div>
     </div>
     <div class="character-card">
-      <img src="img/character/horangi.png" data-character="horangi" alt="Horangi">
+      <img src="img/character/horangi.png" data-character="horangi">
       <div class="character-name">Horangi</div>
     </div>
     <div class="character-card">
-      <img src="img/character/konig.png" data-character="konig" alt="Konig">
+      <img src="img/character/konig.png" data-character="konig">
       <div class="character-name">Konig</div>
     </div>
     <div class="character-card">
-      <img src="img/character/krueger1.png" data-character="krueger1" alt="Krueger 1">
-      <div class="character-name">Krueger 1</div>
+      <img src="img/character/krueger1.png" data-character="krueger1">
+      <div class="character-name">Krueger1</div>
     </div>
     <div class="character-card">
-      <img src="img/character/krueger2.png" data-character="krueger2" alt="Krueger 2">
-      <div class="character-name">Krueger 2</div>
+      <img src="img/character/krueger2.png" data-character="krueger2">
+      <div class="character-name">Krueger2</div>
     </div>
     <div class="character-card">
-      <img src="img/character/nikto.png" data-character="nikto" alt="Nikto">
+      <img src="img/character/nikto.png" data-character="nikto">
       <div class="character-name">Nikto</div>
     </div>
     <div class="character-card">
-      <img src="img/character/zero.png" data-character="zero" alt="Zero">
+      <img src="img/character/zero.png" data-character="zero">
       <div class="character-name">Zero</div>
     </div>
   </div>
 
-  <canvas id="gameCanvas" width="800" height="400"></canvas>
+  <canvas id="gameCanvas" width="800" height="300"></canvas>
 
   <script src="game.js"></script>
 </body>
