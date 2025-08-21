@@ -1,75 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CoD Running</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CoD running</title>
   <style>
     body {
       margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: #fff; /* ← CSS 배경 제거 */
+      padding: 0;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    h1 {
+      margin: 20px 0;
     }
     #character-selection {
-      text-align: center;
-    }
-    .character-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       justify-items: center;
+      align-items: center;
+      padding: 20px;
+      background: url("img/background/morning.png") no-repeat center center/cover;
+      height: 100vh;
+      box-sizing: border-box;
     }
-    .character-option {
+    .character {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       cursor: pointer;
     }
-    .character-option img {
+    .character img {
       width: 40px;
       height: 40px;
       object-fit: contain;
-      display: block;
-      margin: 0 auto;
+    }
+    .character span {
+      margin-top: 5px;
+      font-size: 14px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 1px 1px 2px black;
+    }
+    canvas {
+      display: none;
+      border: 1px solid black;
+      background: white;
     }
   </style>
 </head>
 <body>
+  <h1>CoD running</h1>
+
   <div id="character-selection">
-    <h1>CoD Running</h1>
-    <div class="character-grid">
-      <div class="character-option" onclick="selectCharacter('ghost')">
-        <img src="img/character/ghost.png" alt="Ghost" />
-        <p>Ghost</p>
-      </div>
-      <div class="character-option" onclick="selectCharacter('horangi')">
-        <img src="img/character/horangi.png" alt="Horangi" />
-        <p>Horangi</p>
-      </div>
-      <div class="character-option" onclick="selectCharacter('konig')">
-        <img src="img/character/konig.png" alt="Konig" />
-        <p>Konig</p>
-      </div>
-      <div class="character-option" onclick="selectCharacter('krueger1')">
-        <img src="img/character/krueger1.png" alt="Krueger1" />
-        <p>Krueger1</p>
-      </div>
-      <div class="character-option" onclick="selectCharacter('krueger2')">
-        <img src="img/character/krueger2.png" alt="Krueger2" />
-        <p>Krueger2</p>
-      </div>
-      <div class="character-option" onclick="selectCharacter('nikto')">
-        <img src="img/character/nikto.png" alt="Nikto" />
-        <p>Nikto</p>
-      </div>
-      <div class="character-option" onclick="selectCharacter('zero')">
-        <img src="img/character/zero.png" alt="Zero" />
-        <p>Zero</p>
-      </div>
+    <div class="character" onclick="selectCharacter('ghost')">
+      <img src="img/character/ghost.png" alt="ghost">
+      <span>Ghost</span>
+    </div>
+    <div class="character" onclick="selectCharacter('horangi')">
+      <img src="img/character/horangi.png" alt="horangi">
+      <span>Horangi</span>
+    </div>
+    <div class="character" onclick="selectCharacter('konig')">
+      <img src="img/character/konig.png" alt="konig">
+      <span>Konig</span>
+    </div>
+    <div class="character" onclick="selectCharacter('krueger1')">
+      <img src="img/character/krueger1.png" alt="krueger1">
+      <span>Krueger1</span>
+    </div>
+    <div class="character" onclick="selectCharacter('krueger2')">
+      <img src="img/character/krueger2.png" alt="krueger2">
+      <span>Krueger2</span>
+    </div>
+    <div class="character" onclick="selectCharacter('nikto')">
+      <img src="img/character/nikto.png" alt="nikto">
+      <span>Nikto</span>
+    </div>
+    <div class="character" onclick="selectCharacter('zero')">
+      <img src="img/character/zero.png" alt="zero">
+      <span>Zero</span>
     </div>
   </div>
 
-  <canvas id="gameCanvas" width="800" height="300" style="display:none;"></canvas>
+  <canvas id="gameCanvas" width="800" height="400"></canvas>
 
   <script src="game.js"></script>
 </body>
