@@ -1,86 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CoD running</title>
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
       text-align: center;
       background: #f0f0f0;
+      margin: 0;
+      padding: 0;
     }
 
-    #character-selection {
-      margin-top: 50px;
-    }
-
-    .character-grid {
-      display: grid;
-      grid-template-columns: repeat(2, auto);
-      justify-content: center;
-      gap: 30px;
+    h1 {
       margin-top: 20px;
     }
 
+    #character-selection {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
     .character-card {
-      text-align: center;
-    }
-
-    .character-card img {
-      width: 120px;
-      height: auto;  /* 비율 유지 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       cursor: pointer;
+      background: white;
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
       transition: transform 0.2s;
-      display: block;
-      margin: 0 auto;
     }
 
-    .character-card img:hover {
+    .character-card:hover {
       transform: scale(1.1);
     }
 
-    .character-card p {
+    .character-card img {
+      width: 70px;   /* 가로 고정 */
+      height: auto;  /* 세로는 원본 비율 유지 */
+    }
+
+    .character-name {
       margin-top: 8px;
+      font-size: 14px;
       font-weight: bold;
     }
 
-    #gameCanvas {
+    canvas {
       display: none;
-      background: #ffffff;
-      margin: 20px auto;
-      border: 1px solid #000;
+      background: #fff;
+      border: 1px solid #ccc;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
+  <h1>CoD running</h1>
+
   <div id="character-selection">
-    <h1>CoD running</h1>
-    <div class="character-grid">
-      <div class="character-card">
-        <img src="img/character/horangi.png" alt="Horangi" data-character="horangi">
-        <p>Horangi</p>
-      </div>
-      <div class="character-card">
-        <img src="img/character/konig.png" alt="Konig" data-character="konig">
-        <p>Konig</p>
-      </div>
-      <div class="character-card">
-        <img src="img/character/krueger1.png" alt="Krueger1" data-character="krueger1">
-        <p>Krueger1</p>
-      </div>
-      <div class="character-card">
-        <img src="img/character/krueger2.png" alt="Krueger2" data-character="krueger2">
-        <p>Krueger2</p>
-      </div>
-      <div class="character-card">
-        <img src="img/character/nikto.png" alt="Nikto" data-character="nikto">
-        <p>Nikto</p>
-      </div>
+    <div class="character-card">
+      <img src="img/character/dino1.png" data-character="dino1" alt="Dino 1">
+      <div class="character-name">Dino 1</div>
+    </div>
+    <div class="character-card">
+      <img src="img/character/dino2.png" data-character="dino2" alt="Dino 2">
+      <div class="character-name">Dino 2</div>
+    </div>
+    <div class="character-card">
+      <img src="img/character/dino3.png" data-character="dino3" alt="Dino 3">
+      <div class="character-name">Dino 3</div>
     </div>
   </div>
 
-  <canvas id="gameCanvas" width="800" height="300"></canvas>
+  <canvas id="gameCanvas" width="800" height="400"></canvas>
 
   <script src="game.js"></script>
 </body>
