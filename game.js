@@ -14,31 +14,12 @@ backgroundMorning.src = "img/background/morning.png";
 backgroundEvening.src = "img/background/evening.png";
 backgroundNight.src = "img/background/night.png";
 
-// 캐릭터 선택
-document.querySelectorAll(".character-card img").forEach(img => {
-  img.addEventListener("click", () => {
-    selectedCharacter = img.dataset.character;
-    characterImg.src = `img/character/${selectedCharacter}.png`;
-    // characterJumpImg.src = `img/character/${selectedCharacter}_jump.png`;
-    characterJumpImg.src = `img/character/${selectedCharacter}.png`;
-
-    // 점프 이미지 없으면 fallback
-    characterJumpImg.onerror = () => {
-      characterJumpImg = characterImg;
-    };
-
-    document.getElementById("character-selection").style.display = "none";
-    canvas.style.display = "block";
-
-    startGame();
-  });
-});
-
+// 캐릭터 기본 정보
 let character = {
   x: 50,
-  y: 220,
-  width: 200,
-  height: 200,
+  y: 200,
+  width: 0,
+  height: 0,
   dy: 0,
   gravity: 0.6,
   jumpPower: -12,
@@ -47,15 +28,43 @@ let character = {
 
 let cactus = {
   x: 800,
-  y: 210,
-  width: 35,
-  height: 40
+  y: 230,
+  width: 40,
+  height: 45
 };
 
 let gameSpeed = 2;
 let timer = 0;
 let score = 0;
 let isGameOver = false;
+
+// 캐릭터 선택
+document.querySelectorAll(".character-card img").forEach(img => {
+  img.addEventListener("click", () => {
+    selectedCharacter = img.dataset.character;
+    characterImg.src = `img/character/${selectedCharacter}.png`;
+    characterJumpImg.src = `img/character/${selectedCharacter}_jump.png`;
+
+    // 점프 이미지 없으면 fallback
+    characterJumpImg.onerror = () => {
+      characterJumpImg = characterImg;
+    };
+
+    // 캐릭터 크기를 원본 비율 유지 + 가로 70 고정
+    characterImg.onload = () => {
+      character.width = 70;
+      character.height = characterImg.naturalHeight * (70 / characterImg.naturalWidth);
+
+      // 캐릭터 위치 보정 (땅 위에 서 있도록)
+      character.y = canvas.height - character.height - 40;
+    };
+
+    document.getElementById("character-selection").style.display = "none";
+    canvas.style.display = "block";
+
+    startGame();
+  });
+});
 
 function drawBackground() {
   let bg;
@@ -88,10 +97,10 @@ function update() {
 
   // 캐릭터
   character.y += character.dy;
-  if (character.y + character.height < 250) {
+  if (character.y + character.height < canvas.height - 40) {
     character.dy += character.gravity;
   } else {
-    character.y = 200;
+    character.y = canvas.height - character.height - 40;
     character.dy = 0;
     character.isJumping = false;
   }
