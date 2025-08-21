@@ -5,8 +5,8 @@ let characterImg, characterRunImg, characterJumpImg;
 let character = {
   x: 50,
   y: 300,
-  width: 40,  // ✅ 가로 40 고정
-  height: 40, // 비율에 맞춰 drawImage에서 자동 조정
+  width: 40,  // ✅ 게임에서는 가로 40 고정
+  height: 40,
   dy: 0,
   jumpPower: -10,
   gravity: 0.5,
@@ -19,12 +19,12 @@ cactusImg.src = "img/obstacles/catus.png"; // ✅ 경로 변경
 let cactus = {
   x: 800,
   y: 310,
-  width: 35,  // ✅ 가로 35
-  height: 40, // ✅ 세로 40
+  width: 35,  // ✅ 35 × 40
+  height: 40,
 };
 
 let backgroundImg = new Image();
-backgroundImg.src = "img/background/morning.png"; // 기본 배경
+backgroundImg.src = "img/background/morning.png";
 
 let score = 0;
 let gameSpeed = 2;
@@ -70,8 +70,8 @@ function drawCharacter() {
     imgToDraw = characterRunImg;
   }
 
-  if (imgToDraw && imgToDraw.complete) {
-    // 가로 40 고정, 세로는 원본 비율 유지
+  if (imgToDraw && imgToDraw.complete && imgToDraw.naturalWidth > 0) {
+    // 가로 40 고정, 세로는 비율 유지
     const aspectRatio = imgToDraw.height / imgToDraw.width;
     const drawWidth = character.width;
     const drawHeight = drawWidth * aspectRatio;
