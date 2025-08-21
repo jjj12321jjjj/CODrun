@@ -20,11 +20,12 @@
     }
 
     #character-selection {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* ✅ 한 줄에 3개 */
       gap: 20px;
+      justify-items: center;
       margin-top: 30px;
+      padding: 0 20px;
     }
 
     .character-card {
@@ -45,7 +46,7 @@
     }
 
     .character-card img {
-      width: 40px;   /* ✅ 선택 화면에서는 40×40 고정 */
+      width: 40px;
       height: 40px;
       object-fit: contain;
     }
