@@ -4,7 +4,7 @@ const ctx = canvas.getContext("2d");
 let characterImg, characterRunImg, characterJumpImg;
 let character = {
   x: 50,
-  y: 300,
+  y: 0,   // 위치는 startGame에서 계산
   width: 40,  // ✅ 게임에서는 가로 40 고정
   height: 40,
   dy: 0,
@@ -18,7 +18,7 @@ cactusImg.src = "img/obstacles/catus.png"; // ✅ 경로 변경
 
 let cactus = {
   x: 800,
-  y: 310,
+  y: 0,   // 위치는 startGame에서 계산
   width: 35,  // ✅ 35 × 40
   height: 40,
 };
@@ -53,7 +53,10 @@ document.querySelectorAll(".character-card img").forEach(img => {
 
 // 게임 시작
 function startGame() {
-  character.y = 300;
+  // ✅ 위치를 canvas 하단 기준으로 조정
+  character.y = canvas.height - 20 - character.height;
+  cactus.y = canvas.height - 22 - cactus.height;
+
   cactus.x = 800;
   score = 0;
   gameSpeed = 2;
@@ -62,16 +65,19 @@ function startGame() {
 
 // 캐릭터 그리기
 function drawCharacter() {
-  let imgToDraw = characterImg;
+  let imgToDraw;
 
   if (character.isJumping) {
-    imgToDraw = characterJumpImg;
+    imgToDraw = (characterJumpImg && characterJumpImg.complete && characterJumpImg.naturalWidth > 0)
+      ? characterJumpImg
+      : characterImg; // ✅ _jump 없으면 기본 이미지 사용
   } else {
-    imgToDraw = characterRunImg;
+    imgToDraw = (characterRunImg && characterRunImg.complete && characterRunImg.naturalWidth > 0)
+      ? characterRunImg
+      : characterImg;
   }
 
   if (imgToDraw && imgToDraw.complete && imgToDraw.naturalWidth > 0) {
-    // 가로 40 고정, 세로는 비율 유지
     const aspectRatio = imgToDraw.height / imgToDraw.width;
     const drawWidth = character.width;
     const drawHeight = drawWidth * aspectRatio;
@@ -102,12 +108,12 @@ function update() {
 
   // 점프 물리
   character.y += character.dy;
-  if (character.y + character.height < 350) {
+  if (character.y + character.height < canvas.height - 20) {
     character.dy += character.gravity;
   } else {
     character.dy = 0;
     character.isJumping = false;
-    character.y = 300;
+    character.y = canvas.height - 20 - character.height;
   }
 
   // 장애물 이동
