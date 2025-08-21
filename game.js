@@ -1,33 +1,58 @@
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+let canvas = document.getElementById("gameCanvas");
+let ctx = canvas.getContext("2d");
 
-// ===== 캐릭터 =====
-const characterWidth = 40;
-let characterHeight;
+let character = null;
+let characterImg = new Image();
+
+let cactusImg = new Image();
+cactusImg.src = "img/obstacles/cactus.png";
+let cactusLoaded = false;
+cactusImg.onload = () => {
+  cactusLoaded = true;
+};
+
+let backgroundImg = new Image();
+backgroundImg.src = "img/background/morning.png";
+
 let characterX = 50;
 let characterY;
-let characterImg;
+let groundY = canvas.height - 20; // 기준선
+let cactusX = canvas.width;
+let cactusY;
 
-// ===== 점프 =====
 let isJumping = false;
 let jumpVelocity = 0;
-const gravity = 0.5;
+let gravity = 0.5;
 
-// ===== Cactus =====
-let cactusImg = new Image();
-cactusImg.src = "img/obstacles/catus.png";
+function selectCharacter(name) {
+  character = name;
+  characterImg.src = `img/character/${name}.png`;
 
-const cactusWidth = 35;
-const cactusHeight = 40;
-let cactusX = canvas.width;
-let cactusY = canvas.height - cactusHeight - 22;
+  document.querySelector(".character-selection").style.display = "none";
+  document.querySelector("h2").style.display = "none";
+  canvas.style.display = "block";
 
-// ===== 게임 루프 =====
-let gameInterval;
+  characterImg.onload = () => {
+    characterY = canvas.height - 20 - getScaledHeight(characterImg, 40); // 밑에서 20px
+    cactusY = canvas.height - 22 - 40; // 밑에서 22px, 높이 40
+    startGame();
+  };
+}
 
-function startGame() {
-  document.addEventListener("keydown", handleJump);
-  gameInterval = setInterval(update, 20);
+function getScaledHeight(img, fixedWidth) {
+  let aspectRatio = img.height / img.width;
+  return fixedWidth * aspectRatio;
+}
+
+function drawCharacter() {
+  let scaledHeight = getScaledHeight(characterImg, 40); // 가로 40 고정
+  ctx.drawImage(characterImg, characterX, characterY, 40, scaledHeight);
+}
+
+function drawCactus() {
+  if (cactusLoaded) {
+    ctx.drawImage(cactusImg, cactusX, cactusY, 35, 40);
+  }
 }
 
 function handleJump(e) {
@@ -36,51 +61,47 @@ function handleJump(e) {
     jumpVelocity = -10;
   }
 }
+document.addEventListener("keydown", handleJump);
+
+// 모바일 터치
+canvas.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  if (!isJumping) {
+    isJumping = true;
+    jumpVelocity = -10;
+  }
+});
 
 function update() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // 캐릭터
+  // 배경
+  ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+
+  // 캐릭터 점프
   if (isJumping) {
     characterY += jumpVelocity;
     jumpVelocity += gravity;
 
-    if (characterY >= canvas.height - characterHeight - 20) {
-      characterY = canvas.height - characterHeight - 20;
+    if (characterY >= canvas.height - 20 - getScaledHeight(characterImg, 40)) {
+      characterY = canvas.height - 20 - getScaledHeight(characterImg, 40);
       isJumping = false;
     }
   }
-  drawCharacter();
 
-  // cactus 이동
+  // 장애물 이동
   cactusX -= 5;
-  if (cactusX + cactusWidth < 0) {
+  if (cactusX < -35) {
     cactusX = canvas.width;
   }
+
+  drawCharacter();
   drawCactus();
+
+  requestAnimationFrame(update);
 }
 
-function drawCharacter() {
-  ctx.drawImage(characterImg, characterX, characterY, characterWidth, characterHeight);
+function startGame() {
+  cactusX = canvas.width;
+  update();
 }
-
-function drawCactus() {
-  ctx.drawImage(cactusImg, cactusX, cactusY, cactusWidth, cactusHeight);
-}
-
-// ===== 캐릭터 선택 =====
-document.querySelectorAll(".character-card img").forEach(img => {
-  img.addEventListener("click", () => {
-    const selected = img.dataset.character;
-
-    characterImg = new Image();
-    characterImg.onload = () => {
-      characterHeight = characterImg.height * (characterWidth / characterImg.width);
-      characterY = canvas.height - characterHeight - 20; // 밑에서 20px
-      document.getElementById("character-selection").style.display = "none";
-      canvas.style.display = "block";
-      startGame();
-    };
-    characterImg.src = `img/character/${selected}.png`;
-  });
-});
