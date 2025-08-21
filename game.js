@@ -13,7 +13,7 @@ background.onload = () => {
 };
 
 let cactusImg = new Image();
-cactusImg.src = "img/obstacles/cactus.png";  // ✅ cactus로 고정
+cactusImg.src = "img/obstacles/cactus.png";  // ✅ cactus
 let cactusLoaded = false;
 cactusImg.onload = () => {
   cactusLoaded = true;
@@ -34,11 +34,17 @@ let jumpHeight = 0;
 function selectCharacter(name) {
   character = name;
   characterImg.src = `img/character/${character}.png`;
-  characterLoaded = false;
-  characterImg.onload = () => {
+
+  // 이미지 로드 확인
+  if (characterImg.complete) {
     characterLoaded = true;
     startGame();
-  };
+  } else {
+    characterImg.onload = () => {
+      characterLoaded = true;
+      startGame();
+    };
+  }
 }
 
 function startGame() {
@@ -87,10 +93,12 @@ function jump() {
   }
 }
 
+// 키보드 점프
 document.addEventListener("keydown", (e) => {
   if (e.code === "Space") jump();
 });
 
+// 모바일 터치 점프
 document.addEventListener("touchstart", () => {
   jump();
 });
