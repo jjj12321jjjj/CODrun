@@ -1,118 +1,122 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-let selectedCharacter = null;
-let characterImg = new Image();
-let characterJumpImg = new Image();
-let cactusImg = new Image();
-let backgroundMorning = new Image();
-let backgroundEvening = new Image();
-let backgroundNight = new Image();
-
-cactusImg.src = "img/cactus.png";
-backgroundMorning.src = "img/background/morning.png";
-backgroundEvening.src = "img/background/evening.png";
-backgroundNight.src = "img/background/night.png";
-
-// 캐릭터 기본 정보
+let characterImg, characterRunImg, characterJumpImg;
 let character = {
   x: 50,
-  y: 200,
-  width: 0,
-  height: 0,
+  y: 300,
+  width: 40,  // ✅ 가로 40 고정
+  height: 40, // 비율에 맞춰 drawImage에서 자동 조정
   dy: 0,
-  gravity: 0.6,
-  jumpPower: -12,
+  jumpPower: -10,
+  gravity: 0.5,
   isJumping: false
 };
 
+let cactusImg = new Image();
+cactusImg.src = "img/obstacles/catus.png"; // ✅ 경로 변경
+
 let cactus = {
   x: 800,
-  y: 230,
-  width: 40,
-  height: 45
+  y: 310,
+  width: 35,  // ✅ 가로 35
+  height: 40, // ✅ 세로 40
 };
 
-let gameSpeed = 2;
-let timer = 0;
-let score = 0;
-let isGameOver = false;
+let backgroundImg = new Image();
+backgroundImg.src = "img/background/morning.png"; // 기본 배경
 
-// 캐릭터 선택
+let score = 0;
+let gameSpeed = 2;
+let animationFrameId;
+
+// 캐릭터 선택 이벤트
 document.querySelectorAll(".character-card img").forEach(img => {
   img.addEventListener("click", () => {
-    selectedCharacter = img.dataset.character;
-    characterImg.src = `img/character/${selectedCharacter}.png`;
-    characterJumpImg.src = `img/character/${selectedCharacter}_jump.png`;
+    const selected = img.dataset.character;
 
-    // 점프 이미지 없으면 fallback
-    characterJumpImg.onerror = () => {
-      characterJumpImg = characterImg;
-    };
+    // 캐릭터 이미지 로드
+    characterImg = new Image();
+    characterImg.src = `img/character/${selected}.png`;
 
-    // 캐릭터 크기를 원본 비율 유지 + 가로 70 고정
-    characterImg.onload = () => {
-      character.width = 70;
-      character.height = characterImg.naturalHeight * (70 / characterImg.naturalWidth);
+    characterRunImg = new Image();
+    characterRunImg.src = `img/character/${selected}_run.png`;
 
-      // 캐릭터 위치 보정 (땅 위에 서 있도록)
-      character.y = canvas.height - character.height - 40;
-    };
+    characterJumpImg = new Image();
+    characterJumpImg.src = `img/character/${selected}_jump.png`;
 
     document.getElementById("character-selection").style.display = "none";
     canvas.style.display = "block";
-
     startGame();
   });
 });
 
-function drawBackground() {
-  let bg;
-  if (timer < 5000) bg = backgroundMorning;
-  else if (timer < 10000) bg = backgroundEvening;
-  else bg = backgroundNight;
-
-  ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+// 게임 시작
+function startGame() {
+  character.y = 300;
+  cactus.x = 800;
+  score = 0;
+  gameSpeed = 2;
+  update();
 }
 
+// 캐릭터 그리기
 function drawCharacter() {
-  let img = character.isJumping ? characterJumpImg : characterImg;
+  let imgToDraw = characterImg;
 
-  if (img.complete && img.naturalWidth !== 0) {
-    ctx.drawImage(img, character.x, character.y, character.width, character.height);
+  if (character.isJumping) {
+    imgToDraw = characterJumpImg;
+  } else {
+    imgToDraw = characterRunImg;
+  }
+
+  if (imgToDraw && imgToDraw.complete) {
+    // 가로 40 고정, 세로는 원본 비율 유지
+    const aspectRatio = imgToDraw.height / imgToDraw.width;
+    const drawWidth = character.width;
+    const drawHeight = drawWidth * aspectRatio;
+
+    ctx.drawImage(imgToDraw, character.x, character.y - (drawHeight - character.height), drawWidth, drawHeight);
   }
 }
 
+// 장애물 그리기
 function drawCactus() {
-  ctx.drawImage(cactusImg, cactus.x, cactus.y, cactus.width, cactus.height);
+  if (cactusImg.complete) {
+    ctx.drawImage(cactusImg, cactus.x, cactus.y, cactus.width, cactus.height);
+  }
 }
 
+// 게임 루프
 function update() {
-  if (isGameOver) return;
-
-  timer++;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // 배경
-  drawBackground();
+  ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
 
   // 캐릭터
-  character.y += character.dy;
-  if (character.y + character.height < canvas.height - 40) {
-    character.dy += character.gravity;
-  } else {
-    character.y = canvas.height - character.height - 40;
-    character.dy = 0;
-    character.isJumping = false;
-  }
   drawCharacter();
 
   // 장애물
+  drawCactus();
+
+  // 점프 물리
+  character.y += character.dy;
+  if (character.y + character.height < 350) {
+    character.dy += character.gravity;
+  } else {
+    character.dy = 0;
+    character.isJumping = false;
+    character.y = 300;
+  }
+
+  // 장애물 이동
   cactus.x -= gameSpeed;
   if (cactus.x + cactus.width < 0) {
-    cactus.x = 800 + Math.random() * 200;
+    cactus.x = 800;
     score++;
+    if (gameSpeed < 10) gameSpeed += 0.5;
   }
-  drawCactus();
 
   // 충돌 검사
   if (
@@ -121,25 +125,24 @@ function update() {
     character.y < cactus.y + cactus.height &&
     character.y + character.height > cactus.y
   ) {
-    isGameOver = true;
+    cancelAnimationFrame(animationFrameId);
     alert("Game Over! Score: " + score);
     document.location.reload();
+    return;
   }
 
-  // 속도 증가
-  if (timer % 800 === 0) {
-    gameSpeed += 0.2;
+  // 점수
+  ctx.fillStyle = "black";
+  ctx.font = "20px Arial";
+  ctx.fillText("Score: " + score, 10, 30);
+
+  animationFrameId = requestAnimationFrame(update);
+}
+
+// 점프 이벤트
+document.addEventListener("keydown", e => {
+  if (e.code === "Space" && !character.isJumping) {
+    character.isJumping = true;
+    character.dy = character.jumpPower;
   }
-
-  requestAnimationFrame(update);
-}
-
-function startGame() {
-  document.addEventListener("keydown", (e) => {
-    if (e.code === "Space" && !character.isJumping) {
-      character.dy = character.jumpPower;
-      character.isJumping = true;
-    }
-  });
-  update();
-}
+});
